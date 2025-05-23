@@ -1,4 +1,6 @@
-import { Locator, Page } from "@playwright/test";
+import { expect, Locator, Page } from "@playwright/test";
+import { RegisterPage } from "./register_page.ts";
+import { DashboardPage } from "./dashboard_page.ts";
 
 export class LoginPage {
   private readonly page: Page;
@@ -6,12 +8,18 @@ export class LoginPage {
   private readonly usernameInput: Locator;
   private readonly passwordInput: Locator;
   private readonly loginButton: Locator;
+  private readonly registerButton: Locator;
+  private readonly successRegisterMessage: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.usernameInput = page.locator("[data-testid='username-input']");
     this.passwordInput = page.locator(`[data-testid='password-input']`);
     this.loginButton = page.locator(`[data-testid='submit-button']`);
+    this.registerButton = page.locator(`[data-testid='register-button']`);
+    this.successRegisterMessage = page.locator(
+      `[data-testid='success-message']`
+    );
   }
 
   async openTegBankingApp(): Promise<LoginPage> {
@@ -26,6 +34,21 @@ export class LoginPage {
 
   async fillPassword(password: string): Promise<LoginPage> {
     await this.passwordInput.fill(password);
+    return this;
+  }
+
+  async clickRegister(): Promise<RegisterPage> {
+    await this.registerButton.click();
+    return new RegisterPage(this.page);
+  }
+
+  async clickLogin(): Promise<DashboardPage> {
+    await this.loginButton.click();
+    return new DashboardPage(this.page);
+  }
+
+  async successMessageIsVisible(): Promise<LoginPage> {
+    await expect(this.successRegisterMessage).toBeVisible();
     return this;
   }
 }
