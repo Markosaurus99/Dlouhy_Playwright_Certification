@@ -22,6 +22,22 @@ export class LoginPage {
     );
   }
 
+  async loginAndGetToken(
+    username: string,
+    password: string
+  ): Promise<{ accessToken: string; dashboardPage: DashboardPage }> {
+    await this.usernameInput.fill(username);
+    await this.passwordInput.fill(password);
+    const loginResponsePromise = this.page.waitForResponse(/\/tegb\/login/);
+    await this.loginButton.click();
+    const loginResponse = await loginResponsePromise;
+    const responseBody = await loginResponse.json();
+    const accessToken = responseBody.access_token;
+    await expect(accessToken).toBeDefined();
+    const dashboardPage = new DashboardPage(this.page);
+    return { accessToken, dashboardPage };
+  }
+
   async openTegBankingApp(): Promise<LoginPage> {
     await this.page.goto(this.url);
     return this;

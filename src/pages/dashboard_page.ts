@@ -11,6 +11,9 @@ export class DashboardPage {
   private readonly emailProfileInfo: Locator;
   private readonly telephoneProfileInfo: Locator;
   private readonly ageProfileInfo: Locator;
+  private readonly accountNumber: Locator;
+  private readonly accountBalance: Locator;
+  private readonly accountType: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -23,6 +26,39 @@ export class DashboardPage {
     this.emailProfileInfo = page.locator(`[data-testid='email']`);
     this.telephoneProfileInfo = page.locator(`[data-testid='phone']`);
     this.ageProfileInfo = page.locator(`[data-testid='age']`);
+    this.accountNumber = page.locator(`[data-testid='account-number']`);
+    this.accountBalance = page.locator(`[data-testid='account-balance']`);
+    this.accountType = page.locator(`[data-testid='account-type']`);
+  }
+
+  async accountTypeHasText(accountType: string): Promise<DashboardPage> {
+    await expect(this.accountType).toContainText(accountType);
+    return this;
+  }
+
+  async accountTypeIsVisible(): Promise<DashboardPage> {
+    await expect(this.accountType).toBeVisible();
+    return this;
+  }
+
+  async accountBalanceIsVisible(): Promise<DashboardPage> {
+    await expect(this.accountBalance).toBeVisible();
+    return this;
+  }
+
+  async accountBalanceHasText(accountBalance: number): Promise<DashboardPage> {
+    await expect(this.accountBalance).toContainText(accountBalance.toString());
+    return this;
+  }
+
+  async accountNumberIsVisible(): Promise<DashboardPage> {
+    await expect(this.accountNumber).toBeVisible();
+    return this;
+  }
+
+  async accountNumberHasText(accountNumber: string): Promise<DashboardPage> {
+    await expect(this.accountNumber).toContainText(accountNumber);
+    return this;
   }
 
   async firstNameProfileHasText(firstName: string): Promise<DashboardPage> {
