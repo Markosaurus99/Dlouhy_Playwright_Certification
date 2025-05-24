@@ -38,10 +38,7 @@ export class UserApi {
       },
     });
     expect(response.status()).toBe(201);
-    const responseBody = await response.json();
-    const accessToken = responseBody.access_token;
-    expect(accessToken).toBeDefined();
-    return accessToken;
+    return response;
   }
 
   async createAccount(
@@ -63,5 +60,13 @@ export class UserApi {
     );
     expect(response.status()).toBe(201);
     return response;
+  }
+
+  async getAccessToken(username: string, password: string): Promise<string> {
+    const response = await this.successLoginUser(username, password);
+    const body = await response.json();
+    const accessToken = body.access_token;
+    expect(accessToken).toBeDefined();
+    return accessToken;
   }
 }
