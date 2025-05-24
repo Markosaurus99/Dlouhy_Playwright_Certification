@@ -2,6 +2,7 @@ import test from "@playwright/test";
 import newAccountBalance from "../../src/assets/ddt/account_balance.json";
 import { faker } from "@faker-js/faker";
 import { UserApi } from "../../src/api/user_api.ts";
+import { LoginPage } from "../../src/pages/login_page.ts";
 
 test.describe("DDT TegB Tests", () => {
   let username: string;
@@ -24,6 +25,13 @@ test.describe("DDT TegB Tests", () => {
       page,
     }) => {
       await userApi.createAccount(accessToken, startBalance, "test");
+      const loginPage = new LoginPage(page);
+      await loginPage
+        .openTegBankingApp()
+        .then((login) => login.fillUsername(username))
+        .then((login) => login.fillPassword(password))
+        .then((login) => login.clickLogin())
+        .then((dashboard) => dashboard.accountBalanceHasText(startBalance));
     })
   );
 });
