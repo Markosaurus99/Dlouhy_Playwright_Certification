@@ -1,23 +1,17 @@
-import { expect, Locator, Page } from "@playwright/test";
-import { LoginPage } from "./login_page.ts";
+import { Locator, Page } from "@playwright/test";
 
 export class MenuSection {
   private readonly page: Page;
-  private readonly logoutButton: Locator;
-  private readonly headerTitle: Locator;
+  readonly homeButton: Locator;
+  readonly accountsButton: Locator;
+  readonly transactionButton: Locator;
+  readonly supportButton: Locator;
+
   constructor(page: Page) {
     this.page = page;
-    this.logoutButton = page.locator(`.logout-link`);
-    this.headerTitle = page.locator(`.app-title`);
-  }
-
-  async clickLogout(): Promise<LoginPage> {
-    this.logoutButton.click();
-    return new LoginPage(this.page);
-  }
-
-  async titleIsVisible(): Promise<MenuSection> {
-    await expect(this.headerTitle).toBeVisible();
-    return this;
+    this.homeButton = page.locator(``);
+    this.accountsButton = page.locator(``);
+    this.transactionButton = page.locator(``);
+    this.supportButton = page.locator(``);
   }
 }

@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
-import { LoginPage } from "../src/pages/login_page.ts";
 import { faker } from "@faker-js/faker";
-import { UserApi } from "../src/api/user_api.ts";
+import { UserApi } from "../../src/api/user_api.ts";
+import { LoginPage } from "../../src/pages/login_page.ts";
 
 test.describe("E2E TegB Banking App Tests", () => {
   test("E2E Register, Login, Create Account And Info Check Test", async ({

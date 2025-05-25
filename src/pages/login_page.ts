@@ -10,12 +10,14 @@ export class LoginPage {
   private readonly loginButton: Locator;
   private readonly registerButton: Locator;
   private readonly successRegisterMessage: Locator;
+  readonly loginForm: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.usernameInput = page.locator("[data-testid='username-input']");
     this.passwordInput = page.locator(`[data-testid='password-input']`);
     this.loginButton = page.locator(`[data-testid='submit-button']`);
+    this.loginForm = page.locator(`.Form`);
     this.registerButton = page.locator(`[data-testid='register-button']`);
     this.successRegisterMessage = page.locator(
       `[data-testid='success-message']`

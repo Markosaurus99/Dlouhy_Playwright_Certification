@@ -4,19 +4,49 @@ import { EditProfileModal } from "./edit_profile_modal.ts";
 
 export class DashboardPage {
   private readonly page: Page;
-  private readonly logoutButton: Locator;
-  private readonly editProfileButton: Locator;
-  private readonly firstNameProfileInfo: Locator;
-  private readonly surnameProfileInfo: Locator;
-  private readonly emailProfileInfo: Locator;
-  private readonly telephoneProfileInfo: Locator;
-  private readonly ageProfileInfo: Locator;
-  private readonly accountNumber: Locator;
-  private readonly accountBalance: Locator;
-  private readonly accountType: Locator;
+  readonly logoutButton: Locator;
+  readonly editProfileButton: Locator;
+  readonly firstNameProfileInfo: Locator;
+  readonly surnameProfileInfo: Locator;
+  readonly emailProfileInfo: Locator;
+  readonly telephoneProfileInfo: Locator;
+  readonly ageProfileInfo: Locator;
+  readonly accountNumber: Locator;
+  readonly accountBalance: Locator;
+  readonly accountType: Locator;
+  readonly profileDetailTitle: Locator;
+  readonly accountsTitle: Locator;
+  readonly accountNumberHeading: Locator;
+  readonly accountBalanceHeading: Locator;
+  readonly accountTypeHeading: Locator;
+  readonly dashboardFooter: Locator;
+  readonly firstNameProfileLabel: Locator;
+  readonly surnameProfileLabel: Locator;
+  readonly emailProfileLabel: Locator;
+  readonly telephoneProfileLabel: Locator;
+  readonly ageProfileLabel: Locator;
 
   constructor(page: Page) {
     this.page = page;
+    this.firstNameProfileLabel = page.locator(`[data-testid='name'] strong`);
+    this.surnameProfileLabel = page.locator(`[data-testid='surname'] strong`);
+    this.emailProfileLabel = page.locator(`[data-testid='email'] strong`);
+    this.telephoneProfileLabel = page.locator(`[data-testid='phone'] strong`);
+    this.ageProfileLabel = page.locator(`div[data-testid='phone'] strong`);
+    this.accountNumberHeading = page.locator(
+      `[data-testid='account-number-heading']`
+    );
+    this.accountBalanceHeading = page.locator(
+      `[data-testid='account-balance-heading']`
+    );
+    this.accountTypeHeading = page.locator(
+      `[data-testid='account-type-heading']`
+    );
+    this.dashboardFooter = page.locator(`.dashboard-footer`);
+    this.profileDetailTitle = page.locator(
+      `[data-testid='profile-details-title']`
+    );
+    this.accountsTitle = page.locator(`[data-testid='accounts-title']`);
     this.logoutButton = page.locator(`.logout-link`);
     this.editProfileButton = page.locator(
       `[data-testid='toggle-edit-profile-button']`

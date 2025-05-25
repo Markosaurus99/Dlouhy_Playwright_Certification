@@ -69,4 +69,29 @@ export class UserApi {
     expect(accessToken).toBeDefined();
     return accessToken;
   }
+
+  async updateUserProfile(
+    accessToken: string,
+    name: string,
+    surname: string,
+    age: number,
+    email: string,
+    phone: string
+  ): Promise<APIResponse> {
+    const response = await this.request.patch(`${this.apiUrl}/tegb/profile`, {
+      headers: {
+        authorization: "Bearer " + accessToken,
+      },
+      data: {
+        name,
+        surname,
+        age,
+        email,
+        phone,
+      },
+    });
+
+    expect(response.status()).toBe(200);
+    return response;
+  }
 }
