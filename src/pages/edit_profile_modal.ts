@@ -40,17 +40,23 @@ export class EditProfileModal {
   }
 
   async fillFirstName(firstName: string): Promise<EditProfileModal> {
+    await this.nameInput.waitFor({ state: "visible" });
     await this.nameInput.fill(firstName);
+    await this.page.keyboard.press("Tab");
     return this;
   }
 
   async fillSurname(surname: string): Promise<EditProfileModal> {
+    await this.surnameInput.waitFor({ state: "visible" });
     await this.surnameInput.fill(surname);
+    await this.page.keyboard.press("Tab");
     return this;
   }
 
   async fillEmail(email: string): Promise<EditProfileModal> {
+    await this.emailInput.waitFor({ state: "visible" });
     await this.emailInput.fill(email);
+    await this.page.keyboard.press("Tab");
     return this;
   }
 

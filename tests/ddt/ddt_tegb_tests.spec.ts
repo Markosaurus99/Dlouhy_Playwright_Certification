@@ -1,10 +1,10 @@
 import test from "@playwright/test";
-import newAccountBalance from "../../src/assets/ddt/account_balance.json";
+import accountBalanceData from "../../src/assets/ddt/account_balance.json";
 import { faker } from "@faker-js/faker";
 import { UserApi } from "../../src/api/user_api.ts";
 import { LoginPage } from "../../src/pages/login_page.ts";
 
-test.describe("DDT TegB Tests", () => {
+test.describe.serial("DDT TegB Tests", () => {
   let username: string;
   let password: string;
   let email: string;
@@ -20,18 +20,27 @@ test.describe("DDT TegB Tests", () => {
     accessToken = await userApi.getAccessToken(username, password);
   });
 
-  newAccountBalance.forEach((startBalance: number) =>
-    test(`DDT Create Account With ${startBalance} Balance Test`, async ({
-      page,
-    }) => {
-      await userApi.createAccount(accessToken, startBalance, "test");
-      const loginPage = new LoginPage(page);
-      await loginPage
-        .openTegBankingApp()
-        .then((login) => login.fillUsername(username))
-        .then((login) => login.fillPassword(password))
-        .then((login) => login.clickLogin())
-        .then((dashboard) => dashboard.accountBalanceHasText(startBalance));
-    })
-  );
+  accountBalanceData.forEach((entry) => {
+    const testName = `DDT Create Account With Balance ${entry.balance} `;
+
+    if (!entry.disabled) {
+      test(testName, async ({ page }) => {
+        await userApi.createAccount(accessToken, entry.balance, "test");
+
+        const formattedBalance = `${entry.balance.toFixed(2)} Kč`;
+
+        const loginPage = new LoginPage(page);
+        await loginPage
+          .openTegBankingApp()
+          .then((login) => login.fillUsername(username))
+          .then((login) => login.fillPassword(password))
+          .then((login) => login.clickLogin())
+          .then((dashboard) =>
+            dashboard.accountBalanceHasText(formattedBalance)
+          );
+      });
+    } else {
+      test.skip(`${testName} – SKIPPED: ${entry.disabledReason}`, () => {});
+    }
+  });
 });

@@ -8,7 +8,8 @@ test.describe("E2E TegB Banking App Tests", () => {
     page,
     request,
   }) => {
-    const accountBalance = 100000;
+    const accountBalance = 10000;
+    const formattedBalance = `${accountBalance.toFixed(2)} Kč`;
     const accountType = "Test";
     const username = faker.internet.username();
     const password = faker.internet.password();
@@ -62,7 +63,7 @@ test.describe("E2E TegB Banking App Tests", () => {
       .then((dashboard) => dashboard.accountNumberIsVisible())
       .then((dashboard) => dashboard.accountNumberHasText(accountNumber))
       .then((dashboard) => dashboard.accountBalanceIsVisible())
-      .then((dashboard) => dashboard.accountBalanceHasText(accountBalance))
+      .then((dashboard) => dashboard.accountBalanceHasText(formattedBalance))
       .then((dashboard) => dashboard.accountTypeIsVisible())
       .then((dashboard) => dashboard.accountTypeHasText(accountType))
       .then((dashboard) => dashboard.header.clickLogout());

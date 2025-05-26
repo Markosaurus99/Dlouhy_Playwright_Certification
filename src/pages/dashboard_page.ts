@@ -69,7 +69,7 @@ export class DashboardPage {
   }
 
   async accountTypeHasText(accountType: string): Promise<DashboardPage> {
-    await expect(this.accountType).toContainText(accountType);
+    await expect(this.accountType).toHaveText(accountType);
     return this;
   }
 
@@ -87,8 +87,8 @@ export class DashboardPage {
     return this;
   }
 
-  async accountBalanceHasText(accountBalance: number): Promise<DashboardPage> {
-    await expect(this.accountBalance).toContainText(accountBalance.toString());
+  async accountBalanceHasText(accountBalance: string): Promise<DashboardPage> {
+    await expect(this.accountBalance).toHaveText(`${accountBalance}`);
     return this;
   }
 
@@ -98,7 +98,7 @@ export class DashboardPage {
   }
 
   async accountNumberHasText(accountNumber: string): Promise<DashboardPage> {
-    await expect(this.accountNumber).toContainText(accountNumber);
+    await expect(this.accountNumber).toHaveText(accountNumber);
     return this;
   }
 
