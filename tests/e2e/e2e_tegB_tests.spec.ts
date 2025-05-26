@@ -28,11 +28,8 @@ test.describe("E2E TegB Banking App Tests", () => {
       .then((register) => register.clickSubmit())
       .then((login) => login.successMessageIsVisible());
 
-    const { accessToken, dashboardPage } = await loginPage.loginAndGetToken(
-      username,
-      password
-    );
     const userApi = new UserApi(request);
+    const accessToken = await userApi.getAccessToken(username, password);
     const response = await userApi.createAccount(
       accessToken,
       accountBalance,
@@ -44,19 +41,20 @@ test.describe("E2E TegB Banking App Tests", () => {
 
     //TODO něco udělat s tím reloadem???
 
-    await dashboardPage
-      .clickEditProfile()
+    await loginPage
+      .fillUsername(username)
+      .then((login) => login.fillPassword(password))
+      .then((login) => login.clickLogin())
+      .then((dashboard) => dashboard.clickEditProfile())
+      .then((edit) => edit.waitUntilVisible())
       .then((edit) => edit.fillFirstName(firstName))
       .then((edit) => edit.fillSurname(surname))
       .then((edit) => edit.fillEmail(email))
       .then((edit) => edit.fillTelephone(telephone))
       .then((edit) => edit.fillAge(age))
       .then((edit) => edit.clickSaveChanges())
+      .then((dashboard) => dashboard.updatedProfileMessageIsVisible())
       .then((dashboard) => dashboard.firstNameProfileHasText(firstName))
-      .then((dashboard) => dashboard.clickLogout())
-      .then((login) => login.fillUsername(username))
-      .then((login) => login.fillPassword(password))
-      .then((login) => login.clickLogin())
       .then((dashboard) => dashboard.surnameProfileHasText(surname))
       .then((dashboard) => dashboard.emailProfileHasText(email))
       .then((dashboard) => dashboard.telephoneProfileHasText(telephone))
@@ -67,6 +65,6 @@ test.describe("E2E TegB Banking App Tests", () => {
       .then((dashboard) => dashboard.accountBalanceHasText(accountBalance))
       .then((dashboard) => dashboard.accountTypeIsVisible())
       .then((dashboard) => dashboard.accountTypeHasText(accountType))
-      .then((dashboard) => dashboard.clickLogout());
+      .then((dashboard) => dashboard.header.clickLogout());
   });
 });

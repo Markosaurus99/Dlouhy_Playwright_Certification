@@ -9,9 +9,17 @@ export class MenuSection {
 
   constructor(page: Page) {
     this.page = page;
-    this.homeButton = page.locator(``);
-    this.accountsButton = page.locator(``);
-    this.transactionButton = page.locator(``);
-    this.supportButton = page.locator(``);
+    this.homeButton = page.locator(
+      `//aside[@class="dashboard-sidebar"]//li[.='Domů']`
+    );
+    this.accountsButton = page.locator(
+      `//aside[@class="dashboard-sidebar"]//li[.='Účty']`
+    );
+    this.transactionButton = page.locator(
+      `//aside[@class="dashboard-sidebar"]//li[.='Transakce']`
+    );
+    this.supportButton = page.locator(
+      `//aside[@class="dashboard-sidebar"]//li[.='Podpora']`
+    );
   }
 }

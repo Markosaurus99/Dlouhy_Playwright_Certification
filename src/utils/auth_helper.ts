@@ -18,15 +18,20 @@ export class AuthHelper {
   ) {
     const userApi = new UserApi(request);
 
-    // 1. Registrace
     await userApi.registerUser(username, password, email);
 
-    // 2. Login + získání tokenu
     const token = await userApi.getAccessToken(username, password);
 
-    // 3. Vytvoření bankovního účtu
-    await userApi.createAccount(token, startBalance, type);
+    const accountResponse = await userApi.createAccount(
+      token,
+      startBalance,
+      type
+    );
+
+    const body = await accountResponse.json();
+    const accountNumber = body.accountNumber;
 
     await userApi.updateUserProfile(token, name, surname, age, email, phone);
+    return accountNumber;
   }
 }

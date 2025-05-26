@@ -1,25 +1,38 @@
-import { Locator, Page } from "@playwright/test";
+import { expect, Locator, Page } from "@playwright/test";
 import { DashboardPage } from "./dashboard_page.ts";
 
 export class EditProfileModal {
   private readonly page: Page;
-  private readonly saveChangesButton: Locator;
+  readonly saveChangesButton: Locator;
   private readonly nameInput: Locator;
   private readonly surnameInput: Locator;
   private readonly emailInput: Locator;
   private readonly ageInput: Locator;
   private readonly telephoneInput: Locator;
+  readonly cancelChangesButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.saveChangesButton = page.locator(
       `[data-testid='save-changes-button']`
     );
-    this.nameInput = page.locator(`[data-testid='chage-name-input']`);
-    this.surnameInput = page.locator(`[data-testid='chage-surname-input']`);
-    this.emailInput = page.locator(`[data-testid='chage-email-input']`);
-    this.ageInput = page.locator(`[data-testid='chage-age-input']`);
-    this.telephoneInput = page.locator(`[data-testid='chage-phone-input']`);
+    this.cancelChangesButton = page.locator(
+      `[data-testid='toggle-edit-profile-button']`
+    );
+    this.nameInput = page.locator(`input[data-testid='chage-name-input']`);
+    this.surnameInput = page.locator(
+      `input[data-testid='chage-surname-input']`
+    );
+    this.emailInput = page.locator(`input[data-testid='chage-email-input']`);
+    this.ageInput = page.locator(`input[data-testid='chage-age-input']`);
+    this.telephoneInput = page.locator(
+      `input[data-testid='chage-phone-input']`
+    );
+  }
+
+  async waitUntilVisible(): Promise<EditProfileModal> {
+    await expect(this.cancelChangesButton).toBeVisible();
+    return this;
   }
   async clickSaveChanges(): Promise<DashboardPage> {
     await this.saveChangesButton.click();

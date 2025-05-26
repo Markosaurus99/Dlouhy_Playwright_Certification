@@ -15,7 +15,7 @@ export class HeaderSection {
   }
 
   async clickLogout(): Promise<LoginPage> {
-    this.logoutButton.click();
+    await this.logoutButton.click();
     return new LoginPage(this.page);
   }
 }
