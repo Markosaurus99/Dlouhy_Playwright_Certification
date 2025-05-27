@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import { LoginPage } from "./login_page.ts";
 
-export class RegisterPage {
+export class RegistrationPage {
   private readonly page: Page;
   private readonly usernameInput: Locator;
   private readonly passwordInput: Locator;
@@ -16,17 +16,17 @@ export class RegisterPage {
     this.submitButton = page.locator(`[data-testid='submit-button']`);
   }
 
-  async fillUsername(username: string): Promise<RegisterPage> {
+  async fillUsername(username: string): Promise<RegistrationPage> {
     await this.usernameInput.fill(username);
     return this;
   }
 
-  async fillPassword(password: string): Promise<RegisterPage> {
+  async fillPassword(password: string): Promise<RegistrationPage> {
     await this.passwordInput.fill(password);
     return this;
   }
 
-  async fillEmail(email: string): Promise<RegisterPage> {
+  async fillEmail(email: string): Promise<RegistrationPage> {
     await this.emailInput.fill(email);
     return this;
   }

@@ -1,5 +1,5 @@
 import { expect, Locator, Page } from "@playwright/test";
-import { RegisterPage } from "./register_page.ts";
+import { RegistrationPage } from "./registration_page.ts";
 import { DashboardPage } from "./dashboard_page.ts";
 
 export class LoginPage {
@@ -55,9 +55,9 @@ export class LoginPage {
     return this;
   }
 
-  async clickRegister(): Promise<RegisterPage> {
+  async clickRegister(): Promise<RegistrationPage> {
     await this.registerButton.click();
-    return new RegisterPage(this.page);
+    return new RegistrationPage(this.page);
   }
 
   async clickLogin(): Promise<DashboardPage> {

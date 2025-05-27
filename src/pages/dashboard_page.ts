@@ -29,11 +29,13 @@ export class DashboardPage {
   readonly header: HeaderSection;
   readonly menu: MenuSection;
   readonly profileUpdatedMessage: Locator;
+  private readonly profileSummary: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.header = new HeaderSection(page);
     this.menu = new MenuSection(page);
+    this.profileSummary = page.locator(`div[data-testid='account-summary']`);
     this.profileUpdatedMessage = page.locator(`.update-message`);
     this.firstNameProfileLabel = page.locator(`[data-testid='name'] strong`);
     this.surnameProfileLabel = page.locator(`[data-testid='surname'] strong`);
@@ -66,6 +68,11 @@ export class DashboardPage {
     this.accountBalance = page.locator(`[data-testid='account-balance']`);
     this.accountType = page.locator(`[data-testid='account-type']`);
     this.addAccountButton = page.locator(`.account-action`);
+  }
+
+  async profileSummaryVisualCheck(screenName: string): Promise<DashboardPage> {
+    await expect(this.profileSummary).toHaveScreenshot(`${screenName}.png`);
+    return this;
   }
 
   async accountTypeHasText(accountType: string): Promise<DashboardPage> {
