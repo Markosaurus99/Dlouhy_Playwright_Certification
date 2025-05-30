@@ -2,7 +2,7 @@ import { test } from "@playwright/test";
 import { UserApi } from "../../src/api/user_api.ts";
 import { faker } from "@faker-js/faker";
 
-test.describe("TegB Banking App Api Tests", () => {
+test.describe("TegB Banking App Api Tests", { tag: "@api" }, () => {
   let username: string;
   let password: string;
   let email: string;

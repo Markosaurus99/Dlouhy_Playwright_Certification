@@ -35,38 +35,45 @@ export class EditProfileModal {
     return this;
   }
   async clickSaveChanges(): Promise<DashboardPage> {
+    const loginResponsePromise = this.page.waitForResponse(/\/tegb\/profile/);
     await this.saveChangesButton.click();
+    const loginResponse = await loginResponsePromise;
+    expect(loginResponse.status()).toBe(200);
     return new DashboardPage(this.page);
   }
-
+  // s fill testy velmi často padaly (cca v 50 %), proto takovéto řešení
   async fillFirstName(firstName: string): Promise<EditProfileModal> {
     await this.nameInput.waitFor({ state: "visible" });
-    await this.nameInput.fill(firstName);
-    await this.page.keyboard.press("Tab");
+    await this.nameInput.click();
+    await this.nameInput.fill("");
+    await this.nameInput.pressSequentially(firstName, { delay: 100 });
+    await expect(this.nameInput).toHaveValue(firstName, { timeout: 10000 });
     return this;
   }
 
   async fillSurname(surname: string): Promise<EditProfileModal> {
     await this.surnameInput.waitFor({ state: "visible" });
     await this.surnameInput.fill(surname);
-    await this.page.keyboard.press("Tab");
+    await expect(this.surnameInput).toHaveValue(surname, { timeout: 10000 });
     return this;
   }
 
   async fillEmail(email: string): Promise<EditProfileModal> {
     await this.emailInput.waitFor({ state: "visible" });
     await this.emailInput.fill(email);
-    await this.page.keyboard.press("Tab");
+    await expect(this.emailInput).toHaveValue(email, { timeout: 5000 });
     return this;
   }
 
   async fillTelephone(telephone: string): Promise<EditProfileModal> {
     await this.telephoneInput.fill(telephone);
+    await expect(this.telephoneInput).toHaveValue(telephone, { timeout: 5000 });
     return this;
   }
 
   async fillAge(age: number): Promise<EditProfileModal> {
     await this.ageInput.fill(age.toString());
+    await expect(this.ageInput).toHaveValue(age.toString(), { timeout: 5000 });
     return this;
   }
 }

@@ -7,7 +7,7 @@ import { MenuSection } from "../../src/pages/menu_section.ts";
 import { DashboardPage } from "../../src/pages/dashboard_page.ts";
 import { EditProfileModal } from "../../src/pages/edit_profile_modal.ts";
 
-test.describe.serial("Atomic Tests Dashboard TegB Banking App", () => {
+test.describe.serial("Atomic Tests Dashboard TegB Banking App", { tag: "@atomic"}, () => {
   let name: string;
   let surname: string;
   let phone: string;

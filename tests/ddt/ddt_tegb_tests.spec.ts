@@ -4,7 +4,7 @@ import { faker } from "@faker-js/faker";
 import { UserApi } from "../../src/api/user_api.ts";
 import { LoginPage } from "../../src/pages/login_page.ts";
 
-test.describe.serial("DDT TegB Tests", () => {
+test.describe.serial("DDT TegB Tests", { tag: "@ddt"}, () => {
   let username: string;
   let password: string;
   let email: string;
