@@ -1,13 +1,13 @@
 import test, { expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
-import { AuthHelper } from "../../src/utils/auth_helper.ts";
+import { registerSetupAccountWithProfile } from "../../src/utils/auth_helper.ts";
 import { LoginPage } from "../../src/pages/login_page.ts";
 import { HeaderSection } from "../../src/pages/header_section.ts";
 import { MenuSection } from "../../src/pages/menu_section.ts";
 import { DashboardPage } from "../../src/pages/dashboard_page.ts";
 import { EditProfileModal } from "../../src/pages/edit_profile_modal.ts";
 
-test.describe.serial("Atomic Tests Dashboard TegB Banking App", { tag: "@atomic"}, () => {
+test.describe("Atomic Tests TegB Banking App", { tag: "@atomic" }, () => {
   let name: string;
   let surname: string;
   let phone: string;
@@ -28,7 +28,7 @@ test.describe.serial("Atomic Tests Dashboard TegB Banking App", { tag: "@atomic"
     phone = faker.phone.number();
     age = faker.number.int({ min: 15, max: 100 });
 
-    accountNumber = await AuthHelper.registerSetupAccountWithProfile(
+    accountNumber = await registerSetupAccountWithProfile(
       page,
       request,
       username,
@@ -43,258 +43,307 @@ test.describe.serial("Atomic Tests Dashboard TegB Banking App", { tag: "@atomic"
     );
 
     const loginPage = new LoginPage(page);
+    const tokenObj: { accessToken?: string } = {};
     await loginPage
       .openTegBankingApp()
-      .then((login) => login.loginAndGetToken(username, password));
+      .then((login) => login.loginAndGetToken(username, password, tokenObj));
   });
 
-  test("Header Section Tests", async ({ page }) => {
+  test("Dashboard tests", async ({ page }) => {
     const headerSection = new HeaderSection(page);
-
-    await test.step("TeGB Logo Visibility Test", async () => {
-      await expect.soft(headerSection.tegLogo).toBeVisible();
-    });
-
-    await test.step("Dashboard Title Visibility Test", async () => {
-      await expect.soft(headerSection.headerTitle).toBeVisible();
-    });
-
-    await test.step("Dashboard Title Has Text Test", async () => {
-      await expect.soft(headerSection.headerTitle).toHaveText(`TEG#B Dashboard
-`);
-    });
-
-    await test.step("Logout Button Visibility Test", async () => {
-      await expect.soft(headerSection.logoutButton).toBeVisible();
-    });
-
-    await test.step("Logout Button Has Text Test", async () => {
-      await expect.soft(headerSection.logoutButton).toHaveText(`Odhlásit se`);
-    });
-
-    await test.step("Logout Button Click Test", async () => {
-      const loginPage = new LoginPage(page);
-      await headerSection.clickLogout();
-      await expect.soft(loginPage.loginForm).toBeVisible();
-    });
-  });
-
-  test("Menu Section Tests", async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const editProfileModal = new EditProfileModal(page);
+    const dashboardPage = new DashboardPage(page);
     const menuSection = new MenuSection(page);
 
-    await test.step("Home Button Visibility Test", async () => {
-      await expect.soft(menuSection.homeButton).toBeVisible();
-    });
-    await test.step("Home Button Has Text Test", async () => {
-      await expect.soft(menuSection.homeButton).toHaveText(`Domů`);
-    });
-    await test.step("Accounts Button Visibility Test", async () => {
-      await expect.soft(menuSection.accountsButton).toBeVisible();
-    });
-    await test.step("Accounts Button Has Text Test", async () => {
-      await expect.soft(menuSection.accountsButton).toHaveText(`Účty`);
-    });
-    await test.step("Transactions Button Visibility Test", async () => {
-      await expect.soft(menuSection.transactionButton).toBeVisible();
-    });
-    await test.step("Transactions Button Has Text Test", async () => {
-      await expect.soft(menuSection.transactionButton).toHaveText(`Transakce`);
-    });
-    await test.step("Support Button Visibility Test", async () => {
-      await expect.soft(menuSection.supportButton).toBeVisible();
-    });
-    await test.step("Support Button Has Text Test", async () => {
-      await expect.soft(menuSection.supportButton).toHaveText(`Podpora`);
-    });
-  });
-
-  test("Dashboard Content Tests", async ({ page }) => {
-    const dashboardPage = new DashboardPage(page);
-
-    await test.step("Profile Detail Title Visibility Test", async () => {
-      await expect.soft(dashboardPage.profileDetailTitle).toBeVisible();
-    });
-
-    await test.step("Profile Detail Title Has Text Test", async () => {
+    await test.step("Dashboard Content Tests", async () => {
       await expect
-        .soft(dashboardPage.profileDetailTitle)
+        .soft(
+          dashboardPage.profileDetailTitle,
+          "Profile Detail Title Visibility Test"
+        )
+        .toBeVisible();
+
+      await expect
+        .soft(
+          dashboardPage.profileDetailTitle,
+          "Profile Detail Title Has Text Test"
+        )
         .toHaveText(`Detaily Profilu`);
-    });
 
-    await test.step("Profile First Name Visibility Test", async () => {
-      await expect.soft(dashboardPage.firstNameProfileInfo).toBeVisible();
-    });
-
-    await test.step("Profile First Name Label Has Text Test", async () => {
       await expect
-        .soft(dashboardPage.firstNameProfileLabel)
+        .soft(
+          dashboardPage.firstNameProfileInfo,
+          "Profile First Name Visibility Test"
+        )
+        .toBeVisible();
+
+      await expect
+        .soft(
+          dashboardPage.firstNameProfileLabel,
+          "Profile First Name Label Has Text Test"
+        )
         .toHaveText(`Jméno:`);
-    });
 
-    await test.step("Profile First Name Has Value Test", async () => {
-      await expect.soft(dashboardPage.firstNameProfileInfo).toContainText(name);
-    });
-
-    await test.step("Profile Surname Visibility Test", async () => {
-      await expect.soft(dashboardPage.surnameProfileInfo).toBeVisible();
-    });
-
-    await test.step("Profile Surname Label Has Text Test", async () => {
       await expect
-        .soft(dashboardPage.surnameProfileLabel)
+        .soft(
+          dashboardPage.firstNameProfileInfo,
+          "Profile First Name Has Value Test"
+        )
+        .toContainText(name);
+
+      await expect
+        .soft(
+          dashboardPage.surnameProfileInfo,
+          "Profile Surname Visibility Test"
+        )
+        .toBeVisible();
+
+      await expect
+        .soft(
+          dashboardPage.surnameProfileLabel,
+          "Profile Surname Label Has Text Test"
+        )
         .toHaveText(`Příjmení:`);
-    });
 
-    await test.step("Profile Surname Has Value Test", async () => {
       await expect
-        .soft(dashboardPage.surnameProfileInfo)
+        .soft(
+          dashboardPage.surnameProfileInfo,
+          "Profile Surname Has Value Test"
+        )
         .toContainText(surname);
-    });
 
-    await test.step("Profile Email Visibility Test", async () => {
-      await expect.soft(dashboardPage.emailProfileInfo).toBeVisible();
-    });
-
-    await test.step("Profile Email Label Has Text Test", async () => {
-      await expect.soft(dashboardPage.emailProfileLabel).toHaveText(`Email:`);
-    });
-
-    await test.step("Profile Email Has Value Test", async () => {
-      await expect.soft(dashboardPage.emailProfileInfo).toContainText(email);
-    });
-
-    await test.step("Profile Telephone Visibility Test", async () => {
-      await expect.soft(dashboardPage.telephoneProfileInfo).toBeVisible();
-    });
-
-    await test.step("Profile Telephone Label Has Text Test", async () => {
       await expect
-        .soft(dashboardPage.telephoneProfileLabel)
+        .soft(dashboardPage.emailProfileInfo, "Profile Email Visibility Test")
+        .toBeVisible();
+
+      await expect
+        .soft(
+          dashboardPage.emailProfileLabel,
+          "Profile Email Label Has Text Test"
+        )
+        .toHaveText(`Email:`);
+
+      await expect
+        .soft(dashboardPage.emailProfileInfo, "Profile Email Has Value Test")
+        .toContainText(email);
+
+      await expect
+        .soft(
+          dashboardPage.telephoneProfileInfo,
+          "Profile Telephone Visibility Test"
+        )
+        .toBeVisible();
+
+      await expect
+        .soft(
+          dashboardPage.telephoneProfileLabel,
+          "Profile Telephone Label Has Text Test"
+        )
         .toHaveText(`Telefon:`);
-    });
 
-    await test.step("Profile Telephone Has Value Test", async () => {
       await expect
-        .soft(dashboardPage.telephoneProfileInfo)
+        .soft(
+          dashboardPage.telephoneProfileInfo,
+          "Profile Telephone Has Value Test"
+        )
         .toContainText(phone);
-    });
 
-    await test.step("Profile Age Visibility Test", async () => {
-      await expect.soft(dashboardPage.ageProfileInfo).toBeVisible();
-    });
-
-    await test.step("Profile Age Label Has Text Test", async () => {
-      await expect.soft(dashboardPage.ageProfileLabel).toHaveText(`Věk:`);
-    });
-
-    await test.step("Profile Age Has Value Test", async () => {
       await expect
-        .soft(dashboardPage.ageProfileInfo)
+        .soft(dashboardPage.ageProfileInfo, "Profile Age Visibility Test")
+        .toBeVisible();
+
+      await expect
+        .soft(dashboardPage.ageProfileLabel, "Profile Age Label Has Text Test")
+        .toHaveText(`Věk:`);
+
+      await expect
+        .soft(dashboardPage.ageProfileInfo, "Profile Age Has Value Test")
         .toContainText(age.toString());
-    });
 
-    await test.step("Accounts Title Visibility Test", async () => {
-      await expect.soft(dashboardPage.accountsTitle).toBeVisible();
-    });
-
-    await test.step("Accounts Title Has Text Test", async () => {
-      await expect.soft(dashboardPage.accountsTitle).toHaveText(`Účty`);
-    });
-
-    await test.step("Account Number Heading Visibility Test", async () => {
-      await expect.soft(dashboardPage.accountNumberHeading).toBeVisible();
-    });
-
-    await test.step("Account Number Heading Has Text Test", async () => {
       await expect
-        .soft(dashboardPage.accountNumberHeading)
+        .soft(dashboardPage.accountsTitle, "Accounts Title Visibility Test")
+        .toBeVisible();
+
+      await expect
+        .soft(dashboardPage.accountsTitle, "Accounts Title Has Text Test")
+        .toHaveText(`Účty`);
+
+      await expect
+        .soft(
+          dashboardPage.accountNumberHeading,
+          "Account Number Heading Visibility Test"
+        )
+        .toBeVisible();
+
+      await expect
+        .soft(
+          dashboardPage.accountNumberHeading,
+          "Account Number Heading Has Text Test"
+        )
         .toHaveText(`Číslo účtu	`);
-    });
 
-    await test.step("Account Balance Heading Visibility Test", async () => {
-      await expect.soft(dashboardPage.accountBalanceHeading).toBeVisible();
-    });
-
-    await test.step("Account Balance Heading Has Text Test", async () => {
       await expect
-        .soft(dashboardPage.accountBalanceHeading)
+        .soft(
+          dashboardPage.accountBalanceHeading,
+          "Account Balance Heading Visibility Test"
+        )
+        .toBeVisible();
+
+      await expect
+        .soft(
+          dashboardPage.accountBalanceHeading,
+          "Account Balance Heading Has Text Test"
+        )
         .toHaveText(`Zůstatek	`);
-    });
 
-    await test.step("Account Type Heading Visibility Test", async () => {
-      await expect.soft(dashboardPage.accountTypeHeading).toBeVisible();
-    });
-
-    await test.step("Account Type Heading Has Text Test", async () => {
-      await expect.soft(dashboardPage.accountTypeHeading).toHaveText(`Typ účtu
-`);
-    });
-
-    await test.step("Account Number Visibility Test", async () => {
-      await expect.soft(dashboardPage.accountNumber).toBeVisible();
-    });
-
-    await test.step("Account Number Has Value Test", async () => {
       await expect
-        .soft(dashboardPage.accountNumber)
+        .soft(
+          dashboardPage.accountTypeHeading,
+          "Account Type Heading Visibility Test"
+        )
+        .toBeVisible();
+
+      await expect
+        .soft(
+          dashboardPage.accountTypeHeading,
+          "Account Type Heading Has Text Test"
+        )
+        .toHaveText(`Typ účtu`);
+
+      await expect
+        .soft(dashboardPage.accountNumber, "Account Number Visibility Test")
+        .toBeVisible();
+
+      await expect
+        .soft(dashboardPage.accountNumber, "Account Number Has Value Test")
         .toHaveText(accountNumber.toString());
-    });
 
-    await test.step("Account Balance Visibility Test", async () => {
-      await expect.soft(dashboardPage.accountBalance).toBeVisible();
-    });
-
-    await test.step("Account Balance Has Value Test", async () => {
       await expect
-        .soft(dashboardPage.accountBalance)
+        .soft(dashboardPage.accountBalance, "Account Balance Visibility Test")
+        .toBeVisible();
+
+      await expect
+        .soft(dashboardPage.accountBalance, "Account Balance Has Value Test")
         .toHaveText(`${startBalance.toFixed(2)} Kč`);
-    });
 
-    await test.step("Account Type Visibility Check", async () => {
-      await expect.soft(dashboardPage.accountType).toBeVisible();
-    });
-
-    await test.step("Account Type Has Text Test", async () => {
-      await expect.soft(dashboardPage.accountType).toHaveText(type);
-    });
-
-    await test.step("Dashboard Footer Visibility Check", async () => {
-      await expect.soft(dashboardPage.dashboardFooter).toBeVisible();
-    });
-
-    await test.step("Dashboard Footer Has Text Test", async () => {
       await expect
-        .soft(dashboardPage.dashboardFooter)
+        .soft(dashboardPage.accountType, "Account Type Visibility Check")
+        .toBeVisible();
+
+      await expect
+        .soft(dashboardPage.accountType, "Account Type Has Text Test")
+        .toHaveText(type);
+
+      await expect
+        .soft(
+          dashboardPage.dashboardFooter,
+          "Dashboard Footer Visibility Check"
+        )
+        .toBeVisible();
+
+      await expect
+        .soft(dashboardPage.dashboardFooter, "Dashboard Footer Has Text Test")
         .toHaveText(`© 2023 Banking App`);
-    });
 
-    await test.step("Add Acount Button Visibility Check", async () => {
-      await expect.soft(dashboardPage.addAccountButton).toBeVisible();
-    });
-
-    await test.step("Add Account Button Has Text Test", async () => {
       await expect
-        .soft(dashboardPage.addAccountButton)
+        .soft(
+          dashboardPage.addAccountButton,
+          "Add Acount Button Visibility Check"
+        )
+        .toBeVisible();
+
+      await expect
+        .soft(
+          dashboardPage.addAccountButton,
+          "Add Account Button Has Text Test"
+        )
         .toHaveText(`Přidat účet`);
-    });
 
-    // Až by bylo funkční, tak bych přidal kontrolu na funkčnost/proklik a jestli směřuje button správně
+      // Až by bylo tlačítko unkční, tak bych přidal kontrolu na funkčnost/proklik a jestli směřuje button správně
 
-    await test.step("Edit Profile Button Visibility Check", async () => {
-      await expect.soft(dashboardPage.editProfileButton).toBeVisible();
-    });
-
-    await test.step("Edit Profile Button Has Text", async () => {
       await expect
-        .soft(dashboardPage.editProfileButton)
+        .soft(
+          dashboardPage.editProfileButton,
+          "Edit Profile Button Visibility Check"
+        )
+        .toBeVisible();
+
+      await expect
+        .soft(dashboardPage.editProfileButton, "Edit Profile Button Has Text")
         .toHaveText(`Upravit profil`);
+
+      await dashboardPage.clickEditProfile();
+
+      await expect
+        .soft(
+          editProfileModal.cancelChangesButton,
+          "Edit Profile Button Function Test"
+        )
+        .toBeVisible();
+      await editProfileModal.cancelChangesButton.click();
     });
 
-    await test.step("Edit Profile Button Function Test", async () => {
-      await dashboardPage.clickEditProfile();
-      const editProfileModal = new EditProfileModal(page);
-      await expect.soft(editProfileModal.cancelChangesButton).toBeVisible();
-      await editProfileModal.cancelChangesButton.click();
+    await test.step("Menu Section Tests", async () => {
+      await expect
+        .soft(menuSection.homeButton, "Home Button Visibility Test")
+        .toBeVisible();
+
+      await expect
+        .soft(menuSection.homeButton, "Home Button Has Text Test")
+        .toHaveText(`Domů`);
+
+      await expect
+        .soft(menuSection.accountsButton, "Accounts Button Visibility Test")
+        .toBeVisible();
+
+      await expect
+        .soft(menuSection.accountsButton, "Accounts Button Has Text Test")
+        .toHaveText(`Účty`);
+
+      await expect
+        .soft(
+          menuSection.transactionButton,
+          "Transactions Button Visibility Test"
+        )
+        .toBeVisible();
+
+      await expect
+        .soft(
+          menuSection.transactionButton,
+          "Transactions Button Has Text Test"
+        )
+        .toHaveText(`Transakce`);
+
+      await expect
+        .soft(menuSection.supportButton, "Support Button Visibility Test")
+        .toBeVisible();
+
+      await expect
+        .soft(menuSection.supportButton, "Support Button Has Text Test")
+        .toHaveText(`Podpora`);
+    });
+
+    await test.step("Header Section Tests", async () => {
+      await expect
+        .soft(headerSection.tegLogo, "TeGB Logo Visibility Test")
+        .toBeVisible();
+      await expect
+        .soft(headerSection.headerTitle, "Dashboard Title Visibility Test")
+        .toBeVisible();
+      await expect
+        .soft(headerSection.headerTitle, "Dashboard Title Has Text Test")
+        .toHaveText(`TEG#B Dashboard`);
+      await expect
+        .soft(headerSection.logoutButton, "Logout Button Visibility Test")
+        .toBeVisible();
+      await expect
+        .soft(headerSection.logoutButton, "Logout Button Has Text Test")
+        .toHaveText(`Odhlásit se`);
+      await headerSection.clickLogout();
+      await expect
+        .soft(loginPage.loginForm, "Logout Button Click Test")
+        .toBeVisible();
     });
   });
 });

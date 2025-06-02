@@ -62,7 +62,10 @@ export class UserApi {
     return response;
   }
 
-  async getAccessToken(username: string, password: string): Promise<string> {
+  async loginAndgetAccessToken(
+    username: string,
+    password: string
+  ): Promise<string> {
     const response = await this.successLoginUser(username, password);
     const body = await response.json();
     const accessToken = body.access_token;

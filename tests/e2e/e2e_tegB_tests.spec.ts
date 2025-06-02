@@ -34,7 +34,10 @@ test.describe("E2E TegB Banking App Tests", { tag: "@e2e" }, () => {
 
     await test.step("Create Banking Account API", async () => {
       const userApi = new UserApi(request);
-      const accessToken = await userApi.getAccessToken(username, password);
+      const accessToken = await userApi.loginAndgetAccessToken(
+        username,
+        password
+      );
       const response = await userApi.createAccount(
         accessToken,
         accountBalance,

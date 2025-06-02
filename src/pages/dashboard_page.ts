@@ -136,6 +136,8 @@ export class DashboardPage {
 
   async clickEditProfile(): Promise<EditProfileModal> {
     await this.editProfileButton.click();
+    const editProfileModal = new EditProfileModal(this.page);
+    await editProfileModal.waitUntilVisible();
     return new EditProfileModal(this.page);
   }
 }
