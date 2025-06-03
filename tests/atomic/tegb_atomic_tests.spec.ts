@@ -28,9 +28,7 @@ test.describe("Atomic Tests TegB Banking App", { tag: "@atomic" }, () => {
     phone = faker.phone.number();
     age = faker.number.int({ min: 15, max: 100 });
 
-    accountNumber = await registerSetupAccountWithProfile(
-      page,
-      request,
+    const userData = {
       username,
       password,
       email,
@@ -39,7 +37,13 @@ test.describe("Atomic Tests TegB Banking App", { tag: "@atomic" }, () => {
       name,
       surname,
       age,
-      phone
+      phone,
+    };
+
+    accountNumber = await registerSetupAccountWithProfile(
+      page,
+      request,
+      userData
     );
 
     const loginPage = new LoginPage(page);

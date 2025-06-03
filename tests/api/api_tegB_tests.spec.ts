@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { UserApi } from "../../src/api/user_api.ts";
 import { faker } from "@faker-js/faker";
 
@@ -17,6 +17,9 @@ test.describe("TegB Banking App Api Tests", { tag: "@api" }, () => {
 
   test("Login User Test", async ({ request }) => {
     const userApi = new UserApi(request);
-    await userApi.successLoginUser(username, password);
+    const response = await userApi.successLoginUser(username, password);
+    const body = await response.json();
+
+    expect(body.access_token).toBeDefined();
   });
 });
