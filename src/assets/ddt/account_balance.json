@@ -1,0 +1,24 @@
+[
+  {
+    "balance": 0,
+    "disabled": false
+  },
+  {
+    "balance": 200000.52,
+    "disabled": false
+  },
+  {
+    "balance": -12345,
+    "disabled": false
+  },
+  {
+    "balance": -196000921,
+    "disabled": true,
+    "disabledReason": "500 Internal server error - Částka přes limit"
+  },
+  {
+    "balance": 298000123,
+    "disabled": true,
+    "disabledReason": "500 Internal server error - Částka přes limit"
+  }
+]
